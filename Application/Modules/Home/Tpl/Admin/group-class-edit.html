@@ -1,0 +1,22 @@
+<body>
+<div class="pd-20">
+  <form action="{:U('/Admin/GroupFaEditSub')}" method="post">
+  <div class="text-c">
+    组名： <input class="input-text radius" style="width:200px" type="text" value="{$name}" name="name">
+    <input name="id" type="hidden" value="{$id}">
+  </div>
+    <div class="text-c mt-20">
+    <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-save"></i> 保存</button>
+    </div>
+  </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript">
+$("#post_submit").click(function(){
+	var name = $("input[name=name]").val();
+  	if(name == ''){
+  		alert("组名不能为空"); return false;
+  	}
+
+});
+</script>

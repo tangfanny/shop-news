@@ -1,0 +1,67 @@
+<body>
+<div class="pd-50">
+    <form action="{:U('Index/CooperSubPto')}" method="post" enctype="multipart/form-data">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th class="text-r">名称</th>
+            <td><input type="text" class="input-text radius" name="name" required="required" value="{$data['name']}"></td>
+          </tr>
+          <tr>
+            <th class="text-r">链接</th>
+            <td><input type="text" class="input-text radius" name="link" required="required" value="{$data['link']}"></td>
+          </tr>
+          <tr>
+            <th class="text-r"></th>
+            <td>
+              <if condition=" $data['id'] eq '' ">
+              <else />
+                <div class="dh_footer_logo2">
+                  <?php if(is_numeric($data['logo']) && strlen($data['logo'])==18):?>
+              <img width="250" height="81" src="<?php echo FILE_URL.$data['logo'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($data['logo'])): ?>
+              <?php else: ?>
+              <img width="250" height="81" src="<?php echo IMG_URL.$data['logo'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?>
+            </div>
+              </if>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-r">上传</th>
+            <td>
+              <input type="file" class="am-hide" id="pickfiles" >
+              <input type="hidden" id='chengxing' name="logo" value="{$data['logo']}">
+              <div id="container">
+              </div>
+              <div>
+                     <img src="" id="imgpreview" alt="" >
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="cid" value="3">
+                <input type="hidden" name="id" value="{$data['id']}">
+                <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/jcorp/c/jquery.Jcrop.css" type="text/css" />
+<script src="__PUBLIC__/js/ns-jcorp-admin.js"></script>
+<script>
+    ns_jcorp($("#btn_upload"),$("#ns_newfile"),$("#di_img_con"),$("#btn_jc_complete"),1,1,210,65);
+</script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="__QINIU__ui.js"></script>
+<script type="text/javascript" src="__QINIU__qiniu.js"></script>
+<script type="text/javascript" src="__QINIU__highlight.js"></script>
+<script type="text/javascript" src="__QINIU__main-upload.js"></script>

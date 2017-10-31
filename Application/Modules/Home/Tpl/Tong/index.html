@@ -1,0 +1,30 @@
+<form action="{:U('/Tong/Index')}" method="get">
+          <select class="select" size="1" name="search">
+              <option value="1">时间</option> 
+          </select>
+          <input type="text" style="width:300px" class="input-text radius" id="condition" name="condition" placeholder="起始时间">
+          <input type="text" style="width:300px" class="input-text radius" id="condition" name="condition1" placeholder="截止时间">
+          <button id="post_submit" class="btn btn-secondary radius" type="submit"><i class="Hui-iconfont Hui-iconfont-search"></i> 搜索信息</button>
+        </form>
+<table border="1px">
+	<tr>
+		<th>tpv</th>
+		<th>createtime</th>
+		<th>nikename</th>
+		<th>title</th>
+		<th>name</th>
+		<th>is_check</th>
+	</tr>
+
+	<foreach name="data" item="vo">
+		<tr>
+			<td>{$vo['tpv']}</td>
+			<td>{$vo['createtime']}</td>
+			<td>{$vo['nikename']}</td>
+			<td>{$vo['title']}</td>
+			<td>{$vo['name']}</td>
+			<td>{$vo['is_check']}</td>
+		</tr>
+	</foreach>
+
+</table>

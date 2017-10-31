@@ -1,0 +1,111 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> <a href="{:U('/Banner/Index')}">威客安全banner</a>
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<sapn scope="col" colspan="4" style="margin-top:10px"><a href="{:U('Banner/Footer')}" style="margin:20px 0 0 20px;" class="btn btn-secondary radius ns-ml-05">添加banner</a></span>
+<div class="pd-20">
+  <table class="table table-border table-bordered table-hover table-bg">
+
+    <thead>
+      <tr class="text-c">
+        <th style="width:50px;">顺序</th>
+        <th>标题</th>
+        <th>简介</th>
+        <th>显示</th>
+        <th>banner图片</th>
+        
+        <th>链接地址</th>
+        <th style="width:88px;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <foreach name="result" item="vo" >
+      <td class="ns-ft-14">{$vo.rankid}</td>
+      <td><span style="color:green">{$vo.title}</span></td>
+  		<td class="ns-ft-14">{$vo.desc}</td>
+      <td>
+        <?php if($vo['is_show'] == 1){ ?>
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" checked="checked" onchange='javascript:b(this)';>
+        <?php }else{ ?>
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" onchange='javascript:b(this)';>
+        <?php } ?>
+      </td>
+      <td class="ns-ft-14"><img src="{:IMG_URL.$vo['path']}" width="50px" alt=""></td>
+  		
+  		<td class="ns-ft-14">{$vo.url}</td>
+          <td class="f-14">
+            <a class="l ns-ml-10" title="编辑" href="{:U('Banner/Edit',Array('id'=>$vo['id']))}"><i class="ml-5 icon-edit"></i></a><i class="l ns-ml-10 ">|&nbsp;</i>
+            <a title="删除" href="javascript:;" id="{$vo.id}" onClick="adver_del(this)" class="ml-5" style="text-decoration:none"><i class="icon-trash"></i></a>
+          </td>
+        </tr>
+      </foreach>
+    </tbody>
+  </table>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<!-- 是否显示 -->
+<script type="text/javascript">
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }
+    else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Banner/CateShowAjax')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+</script>
+<script>
+  $('#post_submit').click(function(){
+    var condition = $("#condition").val();
+    if(condition.length == 0){
+       alert('请输入搜索条件！');return false;
+    }
+  })
+</script>
+<!-- 删除 -->
+<script type="text/javascript">
+  function adver_del(e){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Banner/Delete')}";
+          var id= $(e).attr('id');
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'id':id},
+              success: function(data){
+              if(data == 1){
+                  $(e).parents("tr").remove();
+                  layer.msg('已删除!',1);
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+    }
+</script>

@@ -1,0 +1,126 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 平台底部管理 <span class="c-gray en">&gt;</span>
+<a href="{:U('Index/Footer')}">底部管理</a> <span class="c-gray en">&gt;</span> <a href="{:U('/Index/Link')}">友情链接</a>
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+<div class="ns_dh_cm_tab ns-mb-15">
+      <a class="ns_dh_cm_taba" href="{:U('/Index/Footer')}">关于我们</a>
+      <a class="ns_dh_cm_tabfocus" href="{:U('/Index/Link')}">友情链接</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Index/Cooperation')}">合作伙伴</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Index/Contact')}">联系方式</a>
+</div>
+<table class="table table-border table-bordered table-hover table-bg l" style="width:1000px;">
+    <thead>
+      <tr>
+  <th scope="col" colspan="5">
+  <input type="text" placeholder="名称" id="name" class="l input-text radius ns-mr-10">
+  <input type="text" placeholder=" 链接" id="link" style="width:620px;" class="input-text radius">
+  <button type="button" class="btn btn-secondary radius ns-ml-05" onClick="admin_add(this);"><i class="icon-plus"></i> 友情链接</button>
+  </th>
+      </tr>
+      <tr class="text-c">
+        <th>名称</th>
+        <th>链接</th>
+        <th width="90">排序</th>
+        <th width="100">是否显示</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="link" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-15">{$vo.name}</td>
+        <td class="ns-ft-15">{$vo.link}</td>
+        <td>
+<input type="number" style="width:80px;text-align:center;" class="input-text radius" num="{$vo['id']}" value="{$vo.sort}" onchange='javascript:c(this)';></td>
+        <td>
+        <label class="ns-item">
+          <if condition=" $vo['is_show'] eq 0 ">
+           <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" checked="checked" onchange='javascript:b(this)';>
+          <else />
+            <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" onchange='javascript:b(this)';>
+          </if>
+        </label>
+        </td>
+        <td class="f-14">
+        <a title="编辑" href="javascript:;" onClick="admin_role_edit('1','','220','编辑','{:U('Index/LinkEdit',array('id'=>$vo['id']))}')"><i class="ml-5 icon-edit"></i></a>
+        <a title="删除" href="{:U('Index/LinkDel',array('id'=>$vo['id'],'key'=>2))}" class="ml-5"><i class="icon-trash"></i></a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+  function c(e){
+    var id= $(e).attr('num');
+    var sort = $(e).val();
+    var url ="{:U('Index/Footerajax')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'id':id,'sort':sort,'key':3},
+            success: function(data){
+              if(data == 3){
+                location.replace(location.href);
+              }else{
+                alert("操作失败，请联系管理员");
+                location.replace(location.href);
+              }
+          },
+
+        });
+  }
+
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',0);
+    }else{
+      $(e).attr('is_show',1);
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Index/Footerajax')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_show':is_show,'key':4},
+          success: function(data){
+          if(data == 4){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+      });
+  }
+
+  function admin_add(e){
+    var name= $("#name").val();
+    if (name == '') {
+      alert("名称不能为空~！");
+      return;
+    }
+    var zc= /http:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+    var link = $("#link").val();
+    if(!zc.test(link)){
+      alert('链接格式不正确请参考 http://www.secwk.com/');
+      return;
+    }
+    alert('添加成功');
+    var url ="{:U('Index/LinkAdd')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'name':name,'link':link,'cid':2,'key':0},
+            success: function(data){
+              location.replace(location.href);},
+
+        });
+  }
+</script>

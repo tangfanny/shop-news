@@ -1,0 +1,145 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> <a href="{:U('Article/Adver')}">广告管理</a> <span class="c-gray en">&gt;</span> <a href="{:U('/Topics/CtabManage')}"> 侧TAB管理</a> <span class="c-gray en">&gt;</span> {$tab_name}
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="cl pd-5 bg-1 bk-gray">
+    <a class="filePicker" href="javascript:;" onClick="admin_role_edit('1','','300','新增内容','{:U('/Topics/TopicTabAdd')}')">新增内容</a>
+    <span class="r">
+        <form action="{:U('/Topics/CtabManage')}" method="get">
+          <select class="select" size="1" name="search">
+              <option value="2">标题</option>
+              <option value="3">URL</option>
+          </select>
+          <input type="text" style="width:300px" class="input-text radius" id="condition" name="condition">
+          <input type="hidden" name="id" value="{$id}">
+        <button id="post_submit" class="btn btn-secondary radius" type="submit"><i class="Hui-iconfont Hui-iconfont-search"></i> 查找TAB</button>
+        </form>
+    </span>
+  </div>
+  <div class="cl pd-5">
+    <volist name="tablist" id="vo">
+      <a class="btn btn-secondary radius ns-mr-10 ns-mb-05" href="{:U('/Topics/CtabManage',Array('id'=>$vo['id']))}">
+            {$vo.tab_name}
+      </a>
+    </volist>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr class="text-c">
+        <th>标题</th>
+        <th>URL</th>
+        <th width="100">排序</th>
+        <th width="80">是否显示</th>
+        <th width="120">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="list" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-14">{$vo.title}</td>
+        <td class="ns-ft-14">{$vo.url}</td>
+        <td>
+<input type="number" style="width:100px;text-align:center;" class="input-text radius" id="{$vo['id']}" value="{$vo.sort}" onchange='javascript:c(this)';>
+        </td>
+        <td>
+        <if condition=" $vo['is_show'] eq 1 ">
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" checked="checked" onchange='javascript:b(this)';>
+        <else />
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" onchange='javascript:b(this)';>
+        </if>
+        </td>
+        <td class="f-14">
+          <a class="l ns-ml-15" title="编辑" href="javascript:;" onClick="admin_role_edit('1','','300','编辑','{:U('Topics/TopicTabEdit',Array('id'=>$vo['id']))}')"
+          >编辑</a><i class="l ns-ml-15">|</i>
+          <a title="删除" href="javascript:;" id="{$vo.id}" onClick="adver_del(this)" class="ml-5" style="text-decoration:none">删除</a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+
+<div class="pageNav">{$Page}</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+
+<!-- 侧TAB排序 -->
+<script type="text/javascript">
+  function c(e){
+
+    var id= $(e).attr('id');
+    var sort = $(e).val();
+    var url ="{:U('Topics/TopicTabOrder')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'id':id,'sort':sort},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("操作失败，请联系管理员");
+              location.replace(location.href);
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 是否显示 -->
+<script type="text/javascript">
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }
+    else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Topics/TopicTabShow')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+</script>
+<!-- 删除TAB -->
+<script type="text/javascript">
+  function adver_del(e){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Topics/TopicTabDel')}";
+          var id= $(e).attr('id');
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'id':id},
+              success: function(data){
+              if(data == 1){
+                  $(e).parents("tr").remove();
+                  layer.msg('已删除!',1);
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+    }
+</script>

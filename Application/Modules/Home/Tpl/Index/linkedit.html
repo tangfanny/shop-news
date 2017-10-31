@@ -1,0 +1,31 @@
+<body>
+<div class="pd-20">
+    <form action="{:U('Index/LinkEditSub')}" method="post" enctype="multipart/form-data">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th class="text-r">名称:</th>
+            <td>
+              <input type="text" placeholder="名称" name="name" class="l input-text radius" value="{$data['name']}" required="required">
+            </td>
+          </tr>
+          <tr>
+            <th class="text-r">链接：</th>
+            <td>
+              <input type="text" placeholder="链接" style="width:99%" name="link" class="l input-text radius" value="{$data['link']}">
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="key" value="1">
+                <input type="hidden" name="id" value="{$data['id']}">
+                <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>

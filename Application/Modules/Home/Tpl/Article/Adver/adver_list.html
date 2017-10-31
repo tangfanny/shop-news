@@ -1,0 +1,115 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span><a href="{:U('/Article/Adver')}"> 广告管理 </a><span class="c-gray en">&gt;</span>  位置：{$site}
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="cl pd-5 bg-1 bk-gray">
+    <span class="l">
+      <a class="btn btn-secondary radius" href="javascript:;" onClick="admin_role_add('1000','500','添加广告','{:U('/Article/AdverAdd',Array('maxsort'=>$maxsort,'bid'=>$bid,'site'=>$site))}')"><i class="icon-plus"></i> 添加广告</a>
+    </span>
+    <span class="r">共有数据：<strong>{$count}</strong> 条</span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr>
+        <th scope="col" colspan="6">广告管理</th>
+      </tr>
+      <tr class="text-c">
+        <th>标题</th>
+        <th width="200">图片</th>
+        <th width="300">链接</th>
+        <th width="100">排序</th>
+        <th width="120">显示</th>
+        <th width="120">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="banli" id="vo">
+      <tr class="text-c">
+        <td class="text-c">{$vo.title}</td>
+        <td><?php if(is_numeric($vo['path']) && strlen($vo['path'])==18):?>
+            <img  src="<?php echo FILE_URL.$vo['path'].'?imageView2/2/w/200 ';?>"/>
+            <?php elseif(empty($vo['path'])): ?>
+            <?php else: ?>
+            <img  src="<?php echo IMG_URL.$vo['path'].'?imageView2/2/w/200' ;?>"/>
+            <?php endif;?>
+            </td>
+        <td>{$vo.url}</td>
+        <td>{$vo.rankid}</td>
+        <td>
+        <?php if($vo['is_show'] == 1){ ?>
+          <input type="checkbox" is_show="<?php echo $vo['is_show'];?>" num="<?php echo $vo['id'];?>" checked="checked" onchange='javascript:b(this)';>
+        <?php }else{ ?>
+          <input type="checkbox" is_show="<?php echo $vo['is_show'];?>" num="<?php echo $vo['id']?>" onchange='javascript:b(this)';>
+        <?php } ?>
+        </td>
+        <td class="f-14">
+        <a title="编辑" href="javascript:;" onClick="admin_role_edit('1','1000','','编辑','{:U('/Article/AdverEdit',Array('id'=>$vo['id']))}')"><i class="icon-edit"></i></a> <a title="删除" href="javascript:;" onClick="adver_del(this,{$vo['id']})" class="ml-5"><i class="icon-trash"></i></a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+
+<div class="pageNav">{$page}</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<!-- 是否显示 -->
+<script type="text/javascript">
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }
+    else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Article/AdverEditAjax')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+
+</script>
+<script type="text/javascript">
+  function adver_del(obj,id){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Article/AdverDelAjax')}";
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'id':id},
+              success: function(data){
+              if(data == 1){
+
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',1);
+
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+
+
+    }
+</script>

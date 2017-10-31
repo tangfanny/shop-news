@@ -1,0 +1,50 @@
+<body>
+<div class="pd-20">
+    <form action="{:U('Index/FootSubPto')}" method="post" enctype="multipart/form-data">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th class="text-r">图片210*65：</th>
+            <td>
+                 <?php if(is_numeric($logo['logo']) && strlen($logo['logo'])==18):?>
+              <img width="210" height="65" src="<?php echo FILE_URL.$logo['logo'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($logo['logo'])): ?>
+              <?php else: ?>
+              <img width="210" height="65" src="<?php echo IMG_URL.$logo['logo'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-r">上传</th>
+            <td>
+               <input type="file" class="am-hide" id="pickfiles" >
+              <input type="hidden" id='chengxing' name="logo" value="{$logo['logo']}">
+              <div id="container">
+              </div>
+              <div>
+                     <img src="" id="imgpreview" alt="" >
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="cid" value="4">
+                <input type="hidden" name="id" value="{$logo['id']}">
+                <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/jcorp/c/jquery.Jcrop.css" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="__QINIU__ui.js"></script>
+<script type="text/javascript" src="__QINIU__qiniu.js"></script>
+<script type="text/javascript" src="__QINIU__highlight.js"></script>
+<script type="text/javascript" src="__QINIU__main-upload.js"></script>

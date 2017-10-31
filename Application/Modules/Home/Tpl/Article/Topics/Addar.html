@@ -1,0 +1,97 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> <a href="{:U('/Topics/Index')}">专题管理</a>
+<span class="c-gray en">&gt;</span> 添加文章
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="cl pd-5 bg-1 bk-gray">
+    <span class="r">
+      <span class="select-box">
+      <form action="{:U('/Topics/AddArForTopics')}" method="get">
+          <select class="select" size="1" name="search">
+              <option value="1" selected>标题</option>
+              <option value="2">文章ID</option>
+              <option value="3">发布者</option>
+              <option value="4">分类</option>
+              <option value="5">属性</option>
+          </select>
+          <input type="text" style="width:300px" class="input-text radius" id="condition" name="condition" placeholder=" 输入标题或发布者查找文章">
+          <input type="hidden" name="sid" value="{$sid}">
+          <button id="post_submit" class="btn btn-secondary radius" type="submit"><i class="Hui-iconfont Hui-iconfont-search"></i> 搜索文章</button>
+        </form>
+    </span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr>
+        <th id="th_1" scope="col" colspan="10" class="ns-ft-15 text-c" style="color:#5eb95e;">
+          {$search}
+        </th>
+      </tr>
+      <tr class="text-c">
+        <th>标题</th>
+        <th width="80">分类</th>
+        <th width="50">属性</th>
+        <th width="100">发布者</th>
+        <th width="120">发布时间</th>
+        <th width="80">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="list" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-14">{$vo.title}</td>
+        <td class="ns-ft-14">{$vo.cate_name}</td>
+        <td class="ns-ft-14">{$vo.name}</td>
+        <td class="ns-ft-14">{$vo.nikename}</td>
+        <td class="ns-ft-14">
+          <if condition=" empty($vo['create_time']) "> <else />
+            {$vo.create_time|date="Y-m-d H:i",###}
+          </if>
+        </td>
+        <td class="f-14">
+          <if condition=" $vo['sub'] eq 1 ">
+            <input type="checkbox" title="{$vo.title}" sid="{$sid}" is_sub="{$vo['sub']}" num="{$vo['wid']}" checked="checked" onchange='javascript:b(this)';>
+          <else />
+            <input type="checkbox" title="{$vo.title}" sid="{$sid}" is_sub="{$vo['sub']}" num="{$vo['wid']}" onchange='javascript:b(this)';>
+          </if>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+<div class="pageNav">{$Page}</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+  //为专题添加文章
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_sub',1);
+    }
+    else{
+      $(e).attr('is_sub',0); 
+    }
+    var wid= $(e).attr('num');
+    var sid= $(e).attr('sid');
+    var title= $(e).attr('title');
+    var is_sub =$(e).attr('is_sub');
+    var url ="{:U('Topics/AddArForTopicSub')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'sid':sid,'wid':wid,'title':title,'is_sub':is_sub},
+          success: function(data){
+          if(data == 1){
+            // location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+      });
+  }
+</script>

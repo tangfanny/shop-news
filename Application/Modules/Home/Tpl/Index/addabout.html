@@ -1,0 +1,37 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 平台底部管理 <span class="c-gray en">&gt;</span>
+<a href="{:U('Index/Footer')}">底部管理</a> <span class="c-gray en">&gt;</span> 关于我们 <span class="c-gray en">&gt;</span> 增加
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.all.js"></script>
+<div class="pd-20">
+    <form action="{:U('/Index/Footerd')}" method="post" enctype="multipart/form-data">  
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th width="100" class="text-r">名称：</th>
+            <td>
+              <input type="text" class="input-text radius" name="name" placeholder="输入名称，最佳四个字" required="required">
+            </td>
+          </tr>
+          <tr class="text-l">
+            <th width="100" class="text-r">正文：</th>
+            <td colspan="2">
+              <script id="am-container" name="content" type="text/plain" style="width:1024px;height:450px;"></script>
+            </td>
+          </tr> 
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="cid" value="1">
+                <input type="hidden" name="key" value="0">
+                <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+</div>
+<script type="text/javascript">
+    var ue = UE.getEditor('am-container');
+</script>

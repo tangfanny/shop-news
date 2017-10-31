@@ -1,0 +1,26 @@
+<body>
+<div class="pd-20">
+  <div class="Huiform">
+    <form action="{:U('/Topics/TopicTabEditSub')}" method="post">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th width="100" class="text-r"> 标题：</th>
+            <td><input type="text" style="width:400px" class="input-text radius radius" placeholder="标题内容" name="title" value="{$tab['title']}"></td>
+          </tr>
+          <tr>
+            <th class="text-r">URL：</th>
+            <td><input type="text" style="width:400px" class="input-text radius" placeholder="URL" name="url" value="{$tab['url']}"></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="id" value="{$tab['id']}">
+                <button class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>

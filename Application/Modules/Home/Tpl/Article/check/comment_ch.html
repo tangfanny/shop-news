@@ -1,0 +1,104 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> <a href="{:U('/ManageAr/CheckManage')}">审核管理</a> <span class="c-gray en">&gt;</span> <a href="{:U('/ManageAr/CommentCheck')}"> 评论审核</a>
+<span class="c-gray en">&gt;</span> 详情
+<a title="返回上一页" class="btn btn-secondary radius ns-ml-100" style="line-height:1.6em;" href="javascript:history.go(-1)">返回上一页</a></nav>
+</nav>
+<div class="pd-20">
+    <table class="table table-border">
+      <tbody>
+        <tr class="text-l">
+          <td class="ns-ft-16">文章标题：</td>
+          <td class="ns-ft-16" colspan="2">
+              {$comment['title']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">评论者：</td>
+          <td class="ns-ft-16" colspan="2">
+              {$comment['nikename']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">评论内容：</td>
+          <td class="ns-ft-16" colspan="2">
+              <div style="width:800px;">{$comment['content']}</div>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">评论时间：</td>
+          <td class="ns-ft-16" colspan="2">
+            <if condition=" empty($comment['time']) "> <else />
+            {$comment.time|date="Y-m-d H:i",###}
+          </if>
+          </td>
+        </tr> 
+        <tr class="text-l">
+          <td class="ns-ft-16">审核状态：</td>
+          <td colspan="2" class="ns-ft-16">
+              <span class="select-box radius mt-20">
+                  <select class="select ns-w200" size="1" name="status" id="status">
+                        <option value="0" <if condition="$comment['status'] eq 0">selected</if> >未审核</option>
+                        <option value="1" <if condition="$comment['status'] eq 1">selected</if> >通过</option>
+                        <option value="2" <if condition="$comment['status'] eq 2">selected</if> >驳回</option>
+                  </select>
+              </span>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td></td>
+          <td colspan="2">
+              <input type="hidden" id="id" name="id" value="{$comment['id']}">
+              <div id="post_submit" class="ns-w500 filePicker ns-ml-50">提交审核</div>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">驳回原因：</td>
+          <td colspan="2">
+              <textarea style="width:800px" id="refusal" class="input-text radius" rows="4" cols="80" name="refusal" placeholder=""></textarea>
+              <a class="btn btn-secondary radius ns-ml-25" href="javascript:history.go(-1)">返回上一页</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+  function countChoices(obj) {
+     $("input[name='tag']").attr('disabled', true);
+     if($("input[name='tag']:checked").length >= 3) {
+          $("input[name='tag']:checked").attr('disabled', false);
+        }else{
+          $("input[name='tag']").attr('disabled', false);
+        }
+    };
+
+//审核文章ajax
+$("#post_submit").click(function(){
+
+    var wid = $("#wid").val();
+    // if (title.length > 48) {
+    //   alert('标题最大长度为48个字！');return false;
+    // }else if(title == null || title == ''){
+    //   alert('标题不能为空！');return false;
+    // };
+    var is_check = $("#is_check").val();
+    var refusal = $("#refusal").val();
+    var url ="{:U('ManageAr/CheckArSub')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'wid':wid,'is_check':is_check,'refusal':refusal},
+            success: function(data){
+              if(data == 1){
+                alert("审核成功！");
+                window.location.href="{:U('ManageAr/ArticleCheck')}";
+              }else{
+                alert("审核失败，请检查后再试");
+              }
+            },error:function(data){
+                alert("审核失败！请联系管理员")
+              }
+        });
+  });
+</script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>

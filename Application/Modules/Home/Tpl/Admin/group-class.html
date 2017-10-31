@@ -1,0 +1,71 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 系统 <span class="c-gray en">&gt;</span>
+<a href="{:U('/Admin/AdminGroup')}">分组管理</a>
+</nav>
+<div class="pd-20 text-c">
+    上级栏目：
+    <select class="select" id="parentid">
+      <option value="0">一级分组</option>
+      <foreach name="groupf" item="vo">
+        <option value="{$vo['id']}">&nbsp;&nbsp;├&nbsp;{$vo['name']}</option>
+      </foreach>
+    </select>
+    <input class="input-text radius" style="width:200px" type="text" placeholder="输入分组" id="group_name">
+    <button type="button" class="btn btn-success" onClick="addGroup(this);"><i class="icon-plus"></i> 添加</button>
+  <div class="article-class-list cl mt-20">
+    <table class="table table-border table-bordered table-bg">
+      <thead>
+        <tr class="text-c">
+          <th>分组名称</th>
+          <th width="100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      <foreach name="group" item="vo">
+        <tr class="text-c">
+          <td class="text-l" colspan="2">
+            <div class="ns-mb-10 ns-ft-15">
+            <span>{$vo['name']}</span>
+            <a class="r ns-mr-30" href="javascript:;" onClick="admin_role_edit('1','620','170','{$vo['name']} > 编辑','{:U('/Admin/GroupFatherEdit',Array('id'=>$vo['id'],'name'=>$vo['name']))}')">编辑</a>
+            </div>
+            <foreach name="vo.son" item="vo2">
+              <div class="group-list ns-ft-14">
+              &nbsp;&nbsp;├&nbsp;{$vo2['name']}
+              <a class="r" href="javascript:;" onClick="admin_role_edit('1','1000','','{$vo2['name']} > 编辑','{:U('/Admin/AdminGroupRole',Array('gid'=>$vo2['id'],'name'=>$vo2['name']))}')">编辑</a>
+              </div>
+            </foreach>
+          </td>
+        </tr>
+      </foreach>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+  function addGroup(){
+    var parentid = $("#parentid option:selected").val();
+    var name = $("#group_name").val();
+    if(name == ''){
+      alert("分组名不能为空！");return false;
+    }
+    var url ="{:U('Admin/AdminGroupAdd')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'parentid':parentid,'name':name},
+            success: function(data){
+              if(data == 1){
+                location.replace(location.href);
+              }else{
+                alert("操作失败，请联系管理员");
+              }
+          },
+
+        });
+
+  }
+</script>

@@ -1,0 +1,139 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 栏目管理 <span class="c-gray en">&gt;</span> 属性管理
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+<div class="ns_dh_cm_tab ns-mb-15">
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>1))}">分类管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>2))}">标签管理</a>
+      <a <if condition=" $id eq 3 ">class="ns_dh_cm_tabfocus"<else />class="ns_dh_cm_taba"</if> href="{:U('/Article/ColumnMenu',Array('id'=>3))}">属性管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>4))}">侧TAB管理</a>
+</div>
+  <div class="cl pd-5 bg-1 bk-gray" style="width:716px;">
+    <span class="l">
+      <input type="text" style="width:300px" class="input-text radius" id="name" name="name" placeholder="输入属性名称">
+      <div class="btn btn-secondary radius" onclick='javascript:addAttr(this)';><i class="icon-plus"></i> 新增属性</div>
+    </span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg" style="width:728px;">
+    <thead>
+      <tr>
+        <th scope="col" colspan="6">现有属性：</th>
+      </tr>
+      <tr class="text-c">
+        <th>名称</th>
+        <th width="100">是否为专题</th>
+        <th width="150">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="attr" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-15">{$vo.name} <if condition=" $vo['is_sub'] eq 1 ">（专题）</if></td>
+        <td>
+          <if condition=" $vo['is_sub'] eq 1 ">
+            <input type="checkbox" is_sub="{$vo['is_sub']}" num="{$vo['id']}" checked="checked" name="sub" onchange='javascript:b(this)';>
+          <else />
+            <input type="checkbox" is_sub="{$vo['is_sub']}" num="{$vo['id']}" name="sub" onchange='javascript:b(this)';>
+          </if>
+        </td>
+        <td class="f-14">
+        <a title="编辑名称" href="javascript:;" onClick="admin_role_edit('1','600','200','编辑名称','{:U('/Article/ClassEdit',Array('id'=>$vo['id'],'name'=>$vo['name'],'type'=>3))}')"><i class="ml-5 icon-edit"></i></a>
+        <a title="删除" href="javascript:;" onClick="adver_del(this,{$vo['id']})" is_sub="{$vo['is_sub']}" class="ml-5" style="text-decoration:none">
+        <i class="icon-trash"></i>
+        </a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+
+<!-- <div class="pageNav">{$page}</div> -->
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<!-- 新增属性 -->
+<script type="text/javascript">
+  function addAttr(e){
+    var name = $("#name").val();
+    if(name.length == 0){  
+        alert("属性名称为空？"); return false;
+    }
+    var url ="{:U('/Article/NatureAdd')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'name':name},
+            success: function(data){
+            if(data == 1){
+              $(".btn").addClass("disabled");
+              location.replace(location.href);
+            }else{
+              alert("新增失败！");
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 删除属性 -->
+<script type="text/javascript">
+  function adver_del(obj,id){
+  layer.confirm("确认要删除吗？",function(index){
+          var url ="{:U('Article/AttrDelVerify')}";
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'id':id},
+              success: function(data){
+                if(data==1){
+                  alert("该属性下存在专题,请删除专题后再操作");
+                  location.replace(location.href);
+                }else{
+                  $.post("{:U('Article/AttrDelAjax')}",{"id":id},function(data){
+                      if(data == 1){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',1);
+                      }else{
+                        alert("操作失败，请联系管理员");
+                        location.replace(location.href);
+                      }
+                      });
+                }
+            }
+          });
+      });
+  }
+
+  //定义专题
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_sub',1);
+    }else{
+      $(e).attr('is_sub',0); 
+    }
+    var id= $(e).attr('num');
+    var is_sub =$(e).attr('is_sub');
+    var url ="{:U('Article/NatureSetSal')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_sub':is_sub},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+      });
+  }
+</script>
+     <!-- if ($('input:checked').length < 2) {
+         layer.confirm("最后一个专题确认取消吗？",function(index){
+           alert(111);
+         });
+      }-->

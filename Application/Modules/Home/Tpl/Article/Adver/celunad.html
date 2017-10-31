@@ -1,0 +1,123 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span>
+<a href="{:U('Article/Adver')}"> 广告管理</a><span class="c-gray en">&gt;</span>
+<a href="{:U('/Article/CelunAd')}">侧轮播广告管理</a>
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="cl pd-5 bg-1 bk-gray">
+    <span class="l">
+      <a class="btn btn-secondary radius" href="javascript:;" onClick="admin_role_add('','','添加侧轮播','{:U('/Article/celun_add')}')"><i class="icon-plus"></i> 添加侧轮播</a>
+    </span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr class="text-c">
+        <th>标题</th>
+        <th width="170">图片</th>
+        <th width="300">链接</th>
+        <th width="100">排序</th>
+        <th width="80">显示</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="list" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-15">{$vo.title}</td>
+        <td class="ns-ft-15"><img width="168" height="105" src="{:FILE_URL.$vo['path']}"></td>
+        <td class="ns-ft-15">{$vo.url}</td>
+        <td>
+<input type="number" style="width:80px;text-align:center;" class="input-text radius" id="{$vo['id']}" value="{$vo.rankid}" onchange='javascript:c(this)';>
+        </td>
+        <td>
+        <if condition=" $vo['is_show'] eq 1 ">
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" checked="checked" onchange='javascript:b(this)';>
+        <else />
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['id']}" onchange='javascript:b(this)';>
+        </if>
+        </td>
+        <td class="f-14">
+        <a title="编辑" href="javascript:;" onClick="admin_role_edit('1','800','800','编辑','{:U('/Article/celun_edit',Array('id'=>$vo['id']))}')"><i class="ml-5 icon-edit"></i></a>
+        <a title="删除" href="javascript:;" onClick="adver_del(this,{$vo['id']})" class="ml-5"><i class="icon-trash"></i></a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+  function c(e){
+    var id= $(e).attr('id');
+    var rankid = $(e).val();
+    var url ="{:U('Article/CelunOrderBySort')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'id':id,'rankid':rankid},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("排序失败，请联系管理员");
+              location.replace(location.href);
+            }
+          },
+
+        });
+
+  }
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }
+    else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Article/CelunShow')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'id':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+
+  function adver_del(obj,id){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Article/CelunDel')}";
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'id':id},
+              success: function(data){
+              if(data == 1){
+
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',1);
+
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+    }
+</script>

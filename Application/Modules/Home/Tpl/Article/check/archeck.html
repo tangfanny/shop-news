@@ -1,0 +1,173 @@
+<body>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.all.js"></script>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span>
+<a href="{:U('/ManageAr/CheckManage')}">审核管理</a> <span class="c-gray en">&gt;</span> 审核文章
+<a title="返回上一页" class="btn btn-secondary radius ns-ml-100" style="line-height:1.6em;" href="javascript:history.go(-1)">返回上一页</a>
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a>
+</nav>
+<div class="pd-20">
+    <table class="table table-border">
+      <tbody>
+        <tr class="text-l">
+          <td width="100" class="ns-ft-16">文章分类：</td>
+          <td colspan="2" class="ns-ft-16">
+            {$article['cate_name']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">已选标签：</td>
+          <td colspan="2" class="ns-ft-16">
+                <volist name="article['tag']" id="vo">
+                    <div class="l ns-mr-15">{$vo['tag_name']}</div>
+                </volist>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">文章标题：</td>
+          <td class="ns-ft-16" colspan="2">
+              {$article['title']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">文章摘要：</td>
+          <td class="ns-ft-16" colspan="2">
+              {$article['subhead']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">LOGO：</td>
+          <td colspan="2">
+              <?php if(is_numeric($article['logo']) && strlen($article['logo'])==18):?>
+              <img  src="<?php echo FILE_URL.$article['logo'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($article['logo'])): ?>
+              <?php else: ?>
+              <img  src="<?php echo IMG_URL.$article['logo'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">文章内容：</td>
+          <td colspan="2">
+            <div style="width:1000px;">{$article['content']}</div>
+          </td>
+        </tr> 
+        <tr class="text-l">
+          <td class="ns-ft-16">文章属性：</td>
+          <td colspan="2" class="ns-ft-16">
+            {$article['name']}
+          </td>
+        </tr>
+        <tr>
+          <td class="ns-ft-16">
+           文章来源：
+          </td>
+          <td colspan="2" class="ns-ft-16">
+<div class="l ns-mr-15">{$article['source']}</div>
+<if condition=" $article['url'] neq '' ">
+    <div class="l"> ----- </div><div class="l ns-ml-05">URL地址：{$article['url']}</div>
+</if>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">外链URL：</td>
+          <td colspan="2" class="ns-ft-16">
+            {$article['link_url']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">文章作者：</td>
+          <td colspan="2" class="ns-ft-16">
+            {$article['nikename']}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">创建时间：</td>
+          <td colspan="2" class="ns-ft-16">
+            {$article.create_time|date="Y-m-d H:i:s",###}
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">修改时间：</td>
+          <td colspan="2" class="ns-ft-16">
+            <if condition=" empty($article['update_time']) "> <else />
+              {$article.update_time|date="Y-m-d H:i:s",###}
+            </if>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">审核时间：</td>
+          <td colspan="2" class="ns-ft-16">
+            <if condition=" empty($article['check_time']) "> <else />
+              {$article.check_time|date="Y-m-d H:i:s",###}
+            </if>
+          </td>
+        </tr>
+        <tr>
+          <td class="ns-ft-16">发布时间：</td>
+          <td colspan="2">
+                <input class="Wdate input-text radius" id="check_time" type="text" onClick="WdatePicker()" readonly onfocus="WdatePicker({minDate:'%y-%M-{%d}',dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:300px">
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">审核状态：</td>
+          <td colspan="2" class="ns-ft-16">
+              <span class="select-box radius mt-20">
+                  <select class="select ns-w200" size="1" name="is_check" id="is_check">
+                        <option value="0" <if condition="$article['is_check'] eq 0">selected</if> >未审核</option>
+                        <option value="1" <if condition="$article['is_check'] eq 1">selected</if> >通过</option>
+                        <option value="2" <if condition="$article['is_check'] eq 2">selected</if> >驳回</option>
+                  </select>
+              </span>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td></td>
+          <td colspan="2">
+              <input type="hidden" id="wid" name="wid" value="{$article['wid']}">
+              <input type="hidden" id="uid" name="uid" value="{$article['uid']}">
+              <div id="post_submit" class="ns-w500 filePicker ns-ml-50">提交审核</div>
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">驳回原因：</td>
+          <td colspan="2">
+<textarea style="width:800px" id="refusal" class="input-text radius" rows="4" cols="80" name="refusal">{$article['refusal']}</textarea>
+              <a class="btn btn-secondary radius ns-ml-25" href="javascript:history.go(-1)">返回上一页</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+//审核文章ajax
+$("#post_submit").click(function(){
+
+    var wid = $("#wid").val();
+    var uid = $("#uid").val();
+    var check_time = $("#check_time").val();
+
+    var is_check = $("#is_check").val();
+    var refusal = $("#refusal").val();
+    var url ="{:U('ManageAr/CheckArSub')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'wid':wid,'uid':uid,'is_check':is_check,'check_time':check_time,'refusal':refusal},
+            success: function(data){
+              if(data == 1){
+                alert("审核成功！");
+                window.location.href="{:U('ManageAr/ArticleCheck')}";
+              }else{
+                alert("审核失败，请检查后再试");
+              }
+            },error:function(data){
+                alert("审核失败！请联系管理员")
+              }
+        });
+  });
+</script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>

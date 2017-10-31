@@ -1,0 +1,118 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> <a href="{:U('/Recruit/Index')}">招聘信息</a>
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="cl pd-5 bg-1 bk-gray">
+    <span class="r">
+      <form action="{:U('/Recruit/Index')}" method="get">
+          <select class="select" size="1" name="search">
+              <option value="1">职位名称</option>
+              <option value="0">工作地点</option>  
+          </select>
+          <input type="text" style="width:300px" class="input-text radius" id="condition" name="condition" placeholder="请根据条件输入">
+          <button id="post_submit" class="btn btn-secondary radius" type="submit"><i class="Hui-iconfont Hui-iconfont-search"></i> 搜索信息</button>
+        </form>
+    </span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr class="text-c">
+        <th>招聘标题</th>
+        <th>职位名称</th>
+        <th>工作性质</th>
+        <th>驳&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回</th>
+        <th width="100px">招聘人数</th>
+        <th>月薪范围</th>
+        <th>工作地点</th>
+        <th width="100px">工作经验</th>
+        <th width="100px">联系方式</th>
+        <th>logo</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="result" id="vo">
+      <tr class="text-c">
+      <td class="ns-ft-14" style="text-align:left;"><a href="{:U('Recruit/Edit',Array('idx'=>$vo['idx']))}">{$vo.title}</a></td>
+		<td class="ns-ft-14"  style="text-align:left;">{$vo.job_postion}</td>
+    <td>
+    <switch name="vo['job_xingzhi']" >
+          <case value="全职"><span style="color:blue">全职</span></case>
+          <case value="兼职"><span style="color:green">兼职</span></case>
+          <case value="实习"><span style="color:red">实习</span></case>
+          <default />
+    </switch></td>
+    <td>
+    <switch name="vo['ispass']" >
+          <case value="0"><span style="color:blue">待审核</span></case>
+          <case value="1"><span style="color:green">通过</span></case>
+          <case value="2"><span style="color:red">驳回</span></case>
+          <default />
+    </switch>
+        </td>
+		<td class="ns-ft-14">{$vo.job_num}</td>
+    <if condition="$vo.job_money_low eq '0' and $vo.job_money_height eq '0'">
+    <td class="ns-ft-14">面议</td>
+    <else />
+		<td class="ns-ft-14">{$vo.job_money_low}--{$vo.job_money_height}</td>
+    </if>
+		<td class="ns-ft-14">{$vo.job_city}</td>
+     <if condition="$vo.job_jingyan eq null">
+     <td class="ns-ft-14">不限</td>
+     <else />
+    <td class="ns-ft-14">{$vo.job_jingyan}</td>
+    </if>
+		<td class="ns-ft-14">{$vo.hr_email}</td>
+    <td class="ns-ft-14"> <?php if(is_numeric($vo['pic']) && strlen($vo['pic'])==18):?>
+              <img width="50px" src="<?php echo FILE_URL.$vo['pic'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($vo['pic'])): ?>
+              <?php else: ?>
+              <img width="50px" src="<?php echo IMG_URL.$vo['pic'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?></td>
+        <td class="f-14">
+          <a class="l ns-ml-10" title="编辑" href="{:U('Recruit/Edit',Array('idx'=>$vo['idx']))}"><i class="ml-5 icon-edit"></i></a><i class="l ns-ml-10 ">|</i>
+          <a title="删除" href="javascript:;" idx="{$vo.idx}" onClick="adver_del(this)" class="ml-5" style="text-decoration:none"><i class="icon-trash"></i></a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+<div class="pageNav">{$pages}</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<script>
+  $('#post_submit').click(function(){
+    var condition = $("#condition").val();
+    if(condition.length == 0){
+       alert('请输入搜索条件！');return false;
+    }
+  })
+</script>
+<script type="text/javascript">
+  function adver_del(e){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Recruit/Delete')}";
+          var idx= $(e).attr('idx');
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'idx':idx},
+              success: function(data){
+              if(data == 1){
+                  $(e).parents("tr").remove();
+                  layer.msg('已删除!',1);
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+    }
+</script>

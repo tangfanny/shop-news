@@ -1,0 +1,46 @@
+<body style="overflow:hidden"><header class="Hui-header cl">
+<span class="Hui-userbox"><span class="c-white"><!-- 超级管理员： -->{$info['admin_name']}</span>
+<a class="btn btn-danger radius ml-10" href="{:U('/Login/logout')}" title="退出"><i class="icon-off"></i> 退出</a></span> <a aria-hidden="false" class="Hui-nav-toggle" id="nav-toggle" href="#"></a> </header>
+<div class="cl Hui-main">
+  <aside class="Hui-aside" style="">
+    <div class="menu_dropdown bk_2">
+      <volist name="menu_list" id="vo">
+        <dl id="menu-user">
+          <dt><i class="icon-edit"></i> {$vo.name}<b></b></dt>
+          <dd>
+            <ul>
+              <volist name="vo.parenidlist" id="vo2">
+                  <li>
+                      <a _href="{:U($vo2['action'])}" href="javascript:;">
+                          {$vo2.name}
+                      </a>
+                  </li>
+              </volist>
+            </ul>
+          </dd>
+        </dl>
+      </volist>
+    </div>
+  </aside>
+  <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);"></a></div>
+  <section class="Hui-article">
+    <div id="Hui-tabNav" class="Hui-tabNav">
+      <div class="Hui-tabNav-wp">
+        <ul id="min_title_list" class="acrossTab cl">
+          <li class="active"><span title="我的桌面" data-href="{:U('/Index/welcome')}">我的桌面</span><em></em></li>
+        </ul>
+      </div>
+      <div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default btn-small" href="javascript:;"><i class="icon-step-backward"></i></a><a id="js-tabNav-next" class="btn radius btn-default btn-small" href="javascript:;"><i class="icon-step-forward"></i></a></div>
+    </div>
+    <div id="iframe_box" class="Hui-articlebox">
+      <div class="show_iframe">
+        <div style="display:none" class="loading"></div>
+        <iframe scrolling="yes" frameborder="0" src="{:U('/Index/welcome')}"></iframe>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>

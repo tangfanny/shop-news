@@ -1,0 +1,44 @@
+<body>
+<div class="pd-20">
+  <div class="Huiform">
+    <form action="{:U('/Article/celun_adds')}" method="post" enctype="multipart/form-data">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th width="100" class="text-r"> 标题：</th>
+            <td><input type="text" style="width:400px" class="input-text radius radius" placeholder="" name="title"></td>
+          </tr>
+          <tr>
+            <th class="text-r">图片：</th>
+            <td>
+              <input type="file" class="am-hide" id="ns_newfile">
+              <input type="hidden" id='chenxing' name="logo">
+              <div class="ns-mt-10" id="di_img_con"></div>
+              <div class="ns-mt-10 btn btn-secondary radius" id="btn_jc_complete">选择完成</div>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-r">提示：</th>
+            <td class="ns-ft-16">选择图片后如果不需要裁剪，那么直接点击 <div class="btn btn-secondary radius"> 选择完成</div>，图片即上传成功！</td>
+          </tr>
+          <tr>
+            <th class="text-r">链接：</th>
+            <td><input type="text" style="width:400px" class="input-text radius" placeholder="URL" name="url" required="required"></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td><button class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
+<!-- 图片上传  -->
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/jcorp/c/jquery.Jcrop.css" type="text/css" />
+<script src="__PUBLIC__/js/ns-jcorp-admin.js"></script>
+<script>
+    ns_jcorp($("#btn_upload"),$("#ns_newfile"),$("#di_img_con"),$("#btn_jc_complete"),1,1,4,3);
+</script>

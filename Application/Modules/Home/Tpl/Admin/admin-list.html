@@ -1,0 +1,145 @@
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 
+<a href="{:U('/Admin')}">管理员管理</a> <span class="c-gray en">&gt;</span> 管理员列表
+<!-- <span style="margin-left:120px;color:red">添加管理员后请点击编辑添加手机号</span> --><a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+  <div class="text-c"> 
+      <input type="text" placeholder=" 15位以内纯英文字母组成" id="id" class="input-text radius" autocomplete="off"> 
+      <input type="password" placeholder=" 密码" autocomplete="off" id="password" class="input-text radius" autocomplete="off"> 
+      <input type="password" placeholder=" 确认密码" autocomplete="off" id="password2" class="input-text radius" autocomplete="off">
+      <input type="phone" placeholder=" 手机号码" autocomplete="off" id="phone" class="input-text radius" autocomplete="off">
+      <input type="nikename" placeholder="昵称" autocomplete="off" id="nikename" class="input-text radius" autocomplete="off">
+      <select class="select" name="admin-role-group" size="1">
+        <foreach name="group" item="vo">
+          <option value="{$vo.id}">{$vo.name}</option>
+        </foreach>
+      </select>
+      <button type="button" class="btn btn-secondary radius" id="post_submit" onClick="admin_add(this);"><i class="icon-plus"></i> 添加</button>
+  </div>
+  <table class="table table-border table-bordered table-bg mt-20">
+    <thead>
+      <tr class="text-c">
+        <th width="40">ID</th>
+        <th width="120">登录名</th>
+        <th width="140">姓名</th>
+        <th width="140">手机号</th>
+        <th width="160">昵称</th>
+        <th>用户组</th>
+        <th width="140">创建时间</th>
+        <th width="100">是否启用</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <foreach name="user" item="vo" key="k">
+      <tr class="text-c">
+        <td>{$k+1}</td>
+        <td>{$vo.id}</td>
+        <td>{$vo.name}</td>
+        <td>{$vo.phone}</td>
+        <td>{$vo.nikename}</td>
+        <td>{$vo.group_name}</td>
+        <td><if condition=" ($vo['create_time'] neq 0) OR ($vo['create_time'] eq '')">{$vo.create_time|date="Y-m-d H:i:s",###}</if></td>
+        <td>
+          <if condition=" $vo['status'] eq 1 ">
+            <input type="checkbox" is_show="{$vo['status']}" num="{$vo['user_id']}" checked="checked" onchange='javascript:b(this)';>
+          <else />
+            <input type="checkbox" is_show="{$vo['status']}" num="{$vo['user_id']}" onchange='javascript:b(this)';>
+          </if>
+        </td>
+        <td class="f-14">
+          <a class="btn-link" href="javascript:;" onClick="admin_role_edit('1','','','编辑---','{:U('/Admin/AdminUserEdit',Array('uid'=>$vo['user_id']))}')">编辑</a>
+        </td>
+      </tr>
+    </foreach>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+  // 添加管理员
+  function admin_add(e){
+
+    var id = $("#id").val();
+    var reg = /^[A-Za-z]+$/;
+    if (!reg.test(id)) {
+      alert("登录名格式不正确");
+      return;
+    }
+    if (id.length >15) {
+      alert("登录名长度过长");
+      return false;
+    }
+     
+    var password = $("#password").val();
+    if (password == '' || password == null) {
+      alert("密码不能为空");
+      return;
+    }
+    var password2 = $("#password2").val();
+    if (password != password2) {
+      alert("两次密码输入不一致");
+      $("#password").val("");
+      $("#password2").val("");
+      return;
+    }
+    var phone = $("#phone").val();
+    if (phone == "") {
+      alert("手机号码不能为空");
+      return;
+    }
+    var nikename = $("#nikename").val();
+    if (nikename == "") {
+      alert("昵称不能为空");
+      return;
+    }
+    var department = $("select[name='admin-role-group'] option:selected").val();
+    var url ="{:U('/Admin/AdminUserAdd')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'id':id,'pass':password,'phone':phone,'nikename':nikename,'department':department},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else if(data == 0){
+              alert("管理员已存在！");
+              location.replace(location.href);
+            }else{
+              alert("新增管理员失败！");
+              location.replace(location.href);
+            }
+          },
+        });
+  }
+
+function b(e){
+    if(e.checked){
+      $(e).attr('status',1);
+    }
+    else{
+      $(e).attr('status',0); 
+    }
+    var user_id= $(e).attr('num');
+    var status =$(e).attr('status');
+    var url ="{:U('Admin/AdminUserLock')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'user_id':user_id,'status':status},
+          success: function(data){
+            if(data){
+              location.replace(location.href);
+            }else{
+              alert("操作失败，请联系管理员");
+              location.replace(location.href);
+            }
+        },
+
+      });
+  }
+</script>
+</body>
+</html>

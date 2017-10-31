@@ -1,0 +1,56 @@
+
+<body>
+<div class="pd-20">
+  <form action="{:U('/Admin/GroupRoleSub')}" method="post">
+    <table class="table table-border table-bordered table-bg">
+      <tbody>
+        <tr>
+          <th class="text-r ns-ft-14" width="80">分组名称：</th>
+          <td><input name="name" type="text" class="input-text" value="{$name}">
+          <span class="ns-ft-14 ns-ml-10 radius" style="color:red;">
+          温馨提示：选择二级菜单后，需要同时选中其对应的一级菜单；如果只选中一级菜单，操作无效。</span>
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r va-t ns-ft-14">权限：</th>
+          <td>
+            <table class="table table-border table-bordered table-bg">
+              <tbody>
+              <tr>
+                <th class="ns-ft-14" width="150">一级菜单</th>
+                <td class="permission-list ns-ft-14">二级菜单</td>
+              </tr>
+              <foreach name="menu" item="vo">
+                <tr>
+                  <th class="ns-ft-14">
+<label class="item">
+<input name="roles[]" type="checkbox" value="{$vo['roles_id']}" <if condition=" $vo['fal'] eq 1 ">checked</if>> {$vo.name}
+</label>
+                  </th>
+                  <td class="permission-list">
+                    <foreach name="vo.parenidlist" item="vo2">
+<label class="item">
+<input name="roles_id[]" type="checkbox" value="{$vo2['roles_id']}" <if condition=" $vo2['flag'] eq 1 ">checked</if>> {$vo2.name}
+</label>
+                    </foreach>
+                  </td>
+                </tr>
+              </foreach>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <input name="id" type="hidden" value="{$id}">
+            <button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script> 

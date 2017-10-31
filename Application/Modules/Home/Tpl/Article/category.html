@@ -1,0 +1,161 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 栏目管理 <span class="c-gray en">&gt;</span> 分类管理
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+<div class="ns_dh_cm_tab ns-mb-15">
+    <a <if condition=" $id eq 1 ">class="ns_dh_cm_tabfocus"<else />class="ns_dh_cm_taba"</if> href="{:U('/Article/ColumnMenu',Array('id'=>1))}">分类管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>2))}">标签管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>3))}">属性管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>4))}">侧TAB管理</a>
+</div>
+  <div class="cl pd-5 bg-1">
+    <span class="l">
+      <input type="text" style="width:300px" class="input-text radius" id="cate_name" name="cate_name" placeholder=" 输入分类名称">
+      <div class="btn btn-secondary radius" onclick='javascript:addCate(this)';><i class="icon-plus"></i> 新增分类</div>
+    </span>
+    <span class="r">共有数据：<strong>{$count}</strong> 条</span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr>
+        <th scope="col" colspan="6">分类管理</th>
+      </tr>
+      <tr class="text-c">
+        <th width="140">名称</th>
+        <th width="100">位置</th>
+        <th width="80">是否显示</th>
+        <th>标签</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="list" key="k" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-15">{$vo.cate_name}</td>
+        <td>
+<input type="number" style="width:100px;text-align:center;" class="input-text radius" cid="{$vo['cid']}" value="{$vo.sort}" onchange='javascript:c(this)';></td>
+        <td>
+        <?php if($vo['is_show'] == 1){ ?>
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['cid']}" checked="checked" onchange='javascript:b(this)';>
+        <?php }else{ ?>
+          <input type="checkbox" is_show="{$vo['is_show']}" num="{$vo['cid']}" onchange='javascript:b(this)';>
+        <?php } ?>
+        </td>
+        <td class="ns-ft-13 text-l">{$vo.tag_name}</td>
+        <td class="f-14">
+        <a href="javascript:;" onClick="admin_role_edit('1','1000','300','{$vo.cate_name}---修改标签','{:U('/Article/TagAddForCate',Array('cid'=>$vo['cid']))}')">编辑标签</a>
+        </td>
+      </tr>
+      </volist>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<!-- 添加分类 -->
+<script type="text/javascript">
+  function addCate(e){
+
+    var cate_name = $("#cate_name").val();
+    if(cate_name.length == 0){  
+        alert("名称为空？"); return false;
+    }
+    var url ="{:U('/Article/CateAddSub')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'cate_name':cate_name},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("error!");
+              location.replace(location.href);
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 分类排序 -->
+<script type="text/javascript">
+  function c(e){
+
+    var cid= $(e).attr('cid');
+    var sort = $(e).val();
+    var url ="{:U('Article/CateOrderBySort')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'cid':cid,'sort':sort},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("操作失败，请联系管理员");
+              location.replace(location.href);
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 是否显示 -->
+<script type="text/javascript">
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }
+    else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Article/CateShowAjax')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'cid':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+</script>
+<!-- 删除分类 -->
+<script type="text/javascript">
+  function adver_del(obj,id){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Article/CateDelAjax')}";
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'cid':id},
+              success: function(data){
+              if(data == 1){
+
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',1);
+
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+
+          });
+
+      });
+    }
+</script>

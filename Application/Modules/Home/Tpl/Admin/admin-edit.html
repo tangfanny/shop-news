@@ -1,0 +1,54 @@
+﻿<body>
+<div class="pd-20">
+  <form action="{:U('/Admin/AdminEditSub')}" method="post">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th class="text-r" width="30%">账号：</th>
+          <td>{$admin['id']}</td>
+        </tr>
+        <tr>
+          <th class="text-r" width="30%">姓名：</th>
+          <td><input name="name" class="input-text radius" type="text" autocomplete="off" value="{$admin['name']}">
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r">昵称：</th>
+          <td><input name="nikename" class="input-text radius" type="text" value="{$admin['nikename']}">
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r">手机号：</th>
+          <td><input name="phone" class="input-text radius" type="text" value="{$admin['phone']}" autocomplete="off" pattern="^\d{11}$"> （11位纯数字）
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r">用户组：</th>
+          <td>
+            <select class="select" name="department" size="1">
+              <foreach name="group" item="vo">
+                <option <if condition=" $vo.id eq $admin.department ">selected</if> value="{$vo.id}">{$vo.name}</option>
+              </foreach>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r" width="30%">修改密码：</th>
+          <td>
+              <input name="pass" id="oldpassword" class="input-text" type="password" autocomplete="off">
+              <span style="color:red;">（留空为不修改）</span>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <input name="uid" type="hidden" value="{$admin['user_id']}">
+            <button type="submit" class="btn btn-secondary radius" id="admin-edit-save"><i class="icon-ok"></i> 确定</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>

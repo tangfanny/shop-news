@@ -1,0 +1,54 @@
+<body>
+<div class="pd-20">
+  <div class="Huiform">
+    <form action="{:U('/Article/ClassEditCommit')}" method="post">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th width="100" class="text-r"> 标题：</th>
+            <td>
+<input id="name" num="{$arr['name']}" type="text" style="width:300px" class="input-text radius"  value="{$arr['name']}" name="name">
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <input type="hidden" name="id" value="{$arr['id']}">
+              <input type="hidden" id="type" name="type" value="{$arr['type']}">
+            </th>
+            <td>
+            <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript">
+  $("#post_submit").click(function(){
+      var type = $("#type").val();
+      var name = $("#name").val();
+      if (type == 2) {
+          if (/[\u4e00-\u9fa5]/g.test(name)) {
+                if (name.length > 5) {
+                  alert('标签名称汉字最大长度为5个字！');return false;
+                }
+            }else{
+              if (name.length > 10) {
+                  alert('标签名称最大长度为10个字！');return false;
+                }
+            }
+      }
+        
+        if(name.length == 0){
+            alert("总得填点什么吧？");
+            return false;
+        }
+        var num= $("#name").attr('num');
+        if ($("#name").val()==num) {
+            alert("你确定你修改了？");
+            return false;
+        };
+    });
+</script>

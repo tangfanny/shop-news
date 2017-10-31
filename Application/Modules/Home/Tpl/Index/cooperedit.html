@@ -1,0 +1,43 @@
+<body>
+<div class="pd-20">
+    <form action="{:U('Index/FootSubPto')}" method="post" enctype="multipart/form-data">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th class="text-r">图片210*65：</th>
+            <td>
+              <if condition=" $logo['id'] eq '' ">
+              <else />
+                <div class="dh_footer_logo2"><img width="210" height="65" src="{:IMG_URL.$logo['logo']}"></div>
+              </if>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-r">上传：</th>
+            <td>
+              <input type="file" class="am-hide" id="ns_newfile">
+              <input type="hidden" id='chenxing' name="logo">
+              <div class="ns-mt-10" id="di_img_con"></div>
+              <div class="ns-mt-10 btn btn-secondary radius" id="btn_jc_complete">选择完成</div>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+                <input type="hidden" name="cid" value="4">
+                <input type="hidden" name="id" value="{$logo['id']}">
+                <button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/jcorp/c/jquery.Jcrop.css" type="text/css" />
+<script src="__PUBLIC__/js/ns-jcorp-admin.js"></script>
+<script>
+    ns_jcorp($("#btn_upload"),$("#ns_newfile"),$("#di_img_con"),$("#btn_jc_complete"),1,1,210,65);
+</script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>

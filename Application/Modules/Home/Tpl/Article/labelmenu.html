@@ -1,0 +1,163 @@
+<body>
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span> 栏目管理 <span class="c-gray en">&gt;</span> 标签管理
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+<div class="ns_dh_cm_tab ns-mb-15">
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>1))}">分类管理</a>
+      <a <if condition=" $id eq 2 ">class="ns_dh_cm_tabfocus"<else />class="ns_dh_cm_taba"</if> href="{:U('/Article/ColumnMenu',Array('id'=>2))}">标签管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>3))}">属性管理</a>
+      <a class="ns_dh_cm_taba" href="{:U('/Article/ColumnMenu',Array('id'=>4))}">侧TAB管理</a>
+</div>
+  <div class="cl pd-5 bg-1 bk-gray">
+    <span class="l">
+      <input type="text" style="width:300px" class="input-text radius" id="tag_name" name="tag_name" placeholder="输入标签名称，最大五个">
+      <div class="btn btn-secondary radius" onclick='javascript:addLable(this)';><i class="icon-plus"></i> 新增标签</div>
+    </span>
+  </div>
+  <table class="table table-border table-bordered table-hover table-bg">
+    <thead>
+      <tr>
+        <th scope="col" colspan="6">现有标签：</th>
+      </tr>
+      <tr class="text-c">
+        <th width="220">标签名称</th>
+        <th width="150">排序</th>
+        <th width="150">是否显示</th>
+        <th width="200">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <volist name="list" id="vo">
+      <tr class="text-c">
+        <td class="ns-ft-15">{$vo['tag_name']}</td>
+        <td>
+<input type="number" style="width:100px;text-align:center;" class="input-text radius" tid="{$vo['tid']}" value="{$vo.sort}" onchange='javascript:c(this)';></td>
+        <td>
+        <?php if($vo['is_show'] == 1){ ?>
+          <input type="checkbox" is_show="<?php echo $vo['is_show'];?>" num="<?php echo $vo['tid'];?>" checked="checked" onchange='javascript:b(this)';>
+        <?php }else{ ?>
+          <input type="checkbox" is_show="<?php echo $vo['is_show'];?>" num="<?php echo $vo['tid']?>" onchange='javascript:b(this)';>
+        <?php } ?>
+        </td>
+        <td class="f-14">
+        <a title="编辑" href="javascript:;" onClick="admin_role_edit('1','600','200','编辑','{:U('/Article/ClassEdit',Array('id'=>$vo['tid'],'name'=>$vo['tag_name'],'type'=>2))}')"><i class="icon-edit"></i></a>
+        <a title="删除" href="javascript:;" onClick="adver_del(this,{$vo['tid']})" class="ml-5"><i class="icon-trash"></i></a>
+        </td>
+      </tr>
+      </volist>
+      
+    </tbody>
+  </table>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.admin.js"></script>
+<!-- 新增标签 -->
+<script type="text/javascript">
+  function addLable(e){
+    var tag_name = $("#tag_name").val();
+    if (/[\u4e00-\u9fa5]/g.test(tag_name)) {
+        if (tag_name.length > 5) {
+          alert('标签名称汉字最大长度为5个字！');return false;
+        }
+    }else{
+      if (tag_name.length > 10) {
+          alert('标签名称最大长度为10个字！');return false;
+        }
+    }
+    if(tag_name.length == 0){
+        alert("标签名称为空！"); return false;
+    }
+    var url ="{:U('/Article/TagAddSub')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'tag_name':tag_name},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("新增失败！");
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 标签排序 -->
+<script type="text/javascript">
+  function c(e){
+
+    var tid= $(e).attr('tid');
+    var sort = $(e).val();
+    var url ="{:U('Article/TagOrderBySort')}";
+        $.ajax({
+            type:"post",
+            url:url,
+            data:{'tid':tid,'sort':sort},
+            success: function(data){
+            if(data == 1){
+              location.replace(location.href);
+            }else{
+              alert("排序失败，请联系管理员");
+              location.replace(location.href);
+            }
+          },
+
+        });
+
+  }
+</script>
+<!-- 是否显示 -->
+<script type="text/javascript">
+  function b(e){
+    if(e.checked){
+      $(e).attr('is_show',1);
+    }else{
+      $(e).attr('is_show',0); 
+    }
+    var id= $(e).attr('num');
+    var is_show =$(e).attr('is_show');
+    var url ="{:U('Article/TagShowAjax')}";
+      $.ajax({
+          type:"post",
+          url:url,
+          data:{'tid':id,'is_show':is_show},
+          success: function(data){
+          if(data == 1){
+            location.replace(location.href);
+          }else{
+            alert("操作失败，请联系管理员");
+            location.replace(location.href);
+          }
+        },
+
+      });
+  }
+</script>
+<!-- 删除标签 -->
+<script type="text/javascript">
+  function adver_del(obj,id){
+      layer.confirm('确认要删除吗？',function(index){
+
+          var url ="{:U('Article/TagDelAjax')}";
+          $.ajax({
+              type:"post",
+              url:url,
+              data:{'tid':id},
+              success: function(data){
+              if(data == 1){
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',1);
+              }else{
+                  alert("操作失败，请联系管理员");
+                  location.replace(location.href);
+              }
+            },
+          });
+      });
+    }
+</script>

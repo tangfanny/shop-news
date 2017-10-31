@@ -1,0 +1,61 @@
+<body>
+<div class="pd-20">
+  <div class="Huiform">
+    <form action="{:U('/Article/TagAddForCateSub')}" method="post">
+      <table class="table table-bg">
+        <tbody>
+          <tr>
+            <th width="100" class="text-r"> 全选：</th>
+            <td>
+            <label>
+              <span class="l ns-ft-15"><input type="checkbox" data-type="checkall"/><i class="ns-pl-05">全选</i></span>
+            </label>
+            </td>
+          </tr>
+          <tr>
+            <th width="100" class="text-r"> 修改标签：</th>
+            <td>
+                <volist name="tag" id="vo">
+                  <div class="l ns-mr-10 ns-mt-05">
+                    <label>
+<input type="checkbox" data-type="checkbox" name="tag[]" data-value="{$vo.tid}" value="{$vo.tid}" <if condition=" $vo.flag eq 1 ">checked</if> />
+                        <span class="ns-pl-05 ns-ft-15">{$vo.tag_name}</span>
+                    </label>
+                  </div>
+                </volist>
+            </td>
+          </tr>
+          <tr>
+            <th><input type="hidden" name="cid" value="{$cid}"></th>
+            <td><button id="post_submit" class="btn btn-success radius" type="submit"><i class="icon-ok"></i> 确定</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+  $('[data-type="checkall"]').click(function(){
+    var str = '';
+    if($(this).prop("checked")) {
+      $.each($('[data-type="checkbox"]'), function(i){
+        str += $(this).attr('data-value') + ',';
+      });
+      $('[data-type="checkbox"]').prop('checked', true);
+    } else {
+      $('[data-type="checkbox"]').prop('checked', false);
+    }
+  });
+});
+
+$("#post_submit").click(function(){
+  if($("input[type='checkbox']").is(':checked')){
+
+    } else{
+      alert("至少选中一个？"); return false;
+    }
+
+});
+</script>

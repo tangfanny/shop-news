@@ -1,0 +1,1 @@
+<?php	return array ( 0 => 'id', 1 => 'article_id', 2 => 'recommend_sort', 3 => 'start_time', 4 => 'end_time', '_autoinc' => true, '_pk' => 'id', '_type' => array ( 'id' => 'int(11) unsigned', 'article_id' => 'bigint(20) unsigned', 'recommend_sort' => 'int(11) unsigned', 'start_time' => 'int(11) unsigned', 'end_time' => 'int(11) unsigned', ), );?>

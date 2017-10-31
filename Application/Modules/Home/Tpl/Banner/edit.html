@@ -1,0 +1,131 @@
+<body>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="{:MIXED}ue/ueditor.all.js"></script>
+<!-- by xiaoming -->
+<nav class="Hui-breadcrumb"><i class="icon-home"></i> 首页 <span class="c-gray en">&gt;</span>
+<a href="{:U('/Banner/Index')}">banner</a> <span class="c-gray en">&gt;</span> 编辑banner
+<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="icon-refresh"></i></a></nav>
+<div class="pd-20">
+<form action="{:U('/Banner/update')}" method="post" enctype="multipart/form-data">
+    <table class="table">
+    <input type="hidden" id="wid" name="id" value="{$info[0]['id']}">
+      <tbody>
+        <tr>
+            <th class="text-r">原banner：</th>
+            <td>
+               <?php if(is_numeric($info[0]['path']) && strlen($info[0]['path'])==18):?>
+              <img  src="<?php echo FILE_URL.$info[0]['path'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($info[0]['path'])): ?>
+              <?php else: ?>
+              <img  src="<?php echo IMG_URL.$info[0]['path'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?>
+              <!-- <img src="{:IMG_URL.$info[0]['path']}" style="width:500px" alt=""> -->
+            </td>
+        </tr>
+        <tr>
+            <th class="text-r">新banner：</th>
+            <td>
+               <input type="file" class="am-hide" id="pickfiles" >
+              <input type="hidden" id='chengxing' name="path">
+              <div id="container">
+              </div>
+              <div>
+                     <img src="" id="imgpreview" alt="" >
+              </div>
+
+            </td>
+        </tr>
+       <!--  <tr>
+            <th class="text-r">原app_banner：</th>
+            <td>
+                <?php if(is_numeric($info[0]['path_a']) && strlen($info[0]['path_a'])==18):?>
+              <img  src="<?php echo FILE_URL.$info[0]['path_a'].'?imageView2/2/w/200 ';?>"/>
+              <?php elseif(empty($info[0]['path_a'])): ?>
+              <?php else: ?>
+              <img  src="<?php echo IMG_URL.$info[0]['path_a'].'?imageView2/2/w/200' ;?>"/>
+              <?php endif;?>
+              <img src="{:IMG_URL.$info[0]['path_a']}" style="width:500px" alt="">
+            </td>
+        </tr>
+        <tr>
+            <th class="text-r">新app_banner：</th>
+            <td>
+              <input type="file" class="am-hide" id="ns_newfileA">
+              <input type="hidden" id='chenxingA' name="path_a">
+              <div class="ns-mt-10" id="di_img_con"></div>
+              <div class="btn btn-success" id="btn_jc_complete">选择完成</div>
+            </td>
+        </tr>  -->       
+        <tr class="text-l">
+          <td class="ns-ft-16">链接地址:</td>
+          <td colspan="2">
+            <input type="text" style="width:800px" id="title" class="input-text radius" name="url" value="{$info[0]['url']}">
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">标题:</td>
+          <td colspan="2">
+            <input type="text" style="width:800px" id="title" class="input-text radius" name="title" value="{$info[0]['title']}">
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">顺序:</td>
+          <td colspan="2">
+            <input type="text" style="width:800px" id="title" class="input-text radius" name="rankid" value="{$info[0]['rankid']}">
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">简介:</td>
+          <td colspan="2">
+            <input type="text" style="width:800px" id="title" class="input-text radius" name="desc" value="{$info[0]['desc']}">
+          </td>
+        </tr>
+        <tr class="text-l">
+          <td class="ns-ft-16">
+          </td>
+          <td colspan="2">
+              
+              <input type="submit" class="btn btn-primary" value="完成提交">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/jcorp/c/jquery.Jcrop.css" type="text/css" />
+<script src="__PUBLIC__/js/ns-jcorp-admin.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/jcorp/j/jquery.Jcrop.js"></script>
+<script src="__PUBLIC__/js/ns-uploadfile.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="__QINIU__plupload/js/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="__QINIU__ui.js"></script>
+<script type="text/javascript" src="__QINIU__qiniu.js"></script>
+<script type="text/javascript" src="__QINIU__highlight.js"></script>
+<script type="text/javascript" src="__QINIU__main-upload.js"></script>
+<script>
+    ns_upload($("#btn_upload"),$("#ns_newfileW"),0,1,$('#chenxingW'));
+    ns_upload($("#btn_upload"),$("#ns_newfileA"),0,1,$('#chenxingA'));
+</script>
+
+<script type="text/javascript">
+   var ue = UE.getEditor('am-container1');
+</script>
+<script type="text/javascript">
+   var ue = UE.getEditor('am-container2');
+</script>
+<script type="text/javascript">
+   var ue = UE.getEditor('am-container3');
+</script>
+
+<script type="text/javascript" src="__PUBLIC__/js/H-ui.js"></script>
+<script>
+  var str = window.location.host; 
+  var strs = str.split(":");
+  var host = strs[0];
+  document.domain = host;
+</script>
